@@ -7,11 +7,9 @@ import java.util.ArrayList;
 
 @Data
 public class Player {
-
     protected int score;
     private String playerName;
     private ArrayList<Card> playerCards;
-
 
     public Player(String name) {
         this.playerName = name;

@@ -9,31 +9,12 @@ import usjt.uno.view.Color;
 import java.util.ArrayList;
 import java.util.Random;
 
+public class Bot extends Player {
 
-
-/**
- * This class is a simple bot that play insted player
- * 
- * 
- * @author Mohammad Mahdi Malmasi
- * @version 0.2.0
- */
-public class Bot extends Player
-{
-
-            /* Constructor */
-
-    /**
-     * Creat a new Bot 
-     * @param num : the number of the bot
-     */
     public Bot(int num)
     {
-        super("Bot"+num, ""+num);
+        super("Bot"+num);
     }
-
-
-
 
     /**
      * This method is a kind of main method for bot
