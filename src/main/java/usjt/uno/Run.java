@@ -91,7 +91,7 @@ public class Run
 
                     
                             // creat new player
-                            Rules.addPlayer(new Player(newPlayerName, newPlayerPass));
+                            Rules.addPlayer(new Player(newPlayerName));
                         }
                     }
 
