@@ -1,6 +1,6 @@
 package usjt.uno.view;
 
-import usjt.uno.model.entities.Player;
+import usjt.uno.model.entities.player.Player;
 import usjt.uno.model.game.cards.Card;
 
 import java.util.ArrayList;

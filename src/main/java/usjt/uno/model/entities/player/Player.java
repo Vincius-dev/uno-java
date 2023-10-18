@@ -1,4 +1,4 @@
-package usjt.uno.model.entities;
+package usjt.uno.model.entities.player;
 
 import lombok.Data;
 import usjt.uno.model.game.cards.Card;

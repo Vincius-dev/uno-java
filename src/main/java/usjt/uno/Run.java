@@ -1,7 +1,7 @@
 package usjt.uno;
 
 import usjt.uno.model.entities.Bot;
-import usjt.uno.model.entities.Player;
+import usjt.uno.model.entities.player.Player;
 import usjt.uno.model.game.Rules;
 import usjt.uno.view.Printer;
 

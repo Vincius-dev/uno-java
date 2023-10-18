@@ -1,5 +1,6 @@
 package usjt.uno.model.entities;
 
+import usjt.uno.model.entities.player.Player;
 import usjt.uno.model.game.Rules;
 import usjt.uno.model.game.cards.Card;
 import usjt.uno.model.game.cards.especialcards.WildCard;

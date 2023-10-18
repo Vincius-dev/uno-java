@@ -1,7 +1,7 @@
 package usjt.uno.model.game;
 
 import usjt.uno.model.entities.Bot;
-import usjt.uno.model.entities.Player;
+import usjt.uno.model.entities.player.Player;
 import usjt.uno.model.game.cards.Card;
 import usjt.uno.model.game.cards.especialcards.*;
 import usjt.uno.view.Color;
@@ -131,11 +131,8 @@ public class Rules
             }
         }
 
-
-        else if (playerChoosenCard instanceof Draw2Card)
-        {
-            for (int n = 0; n < 2; n++)
-            {
+        else if (playerChoosenCard instanceof Draw2Card) {
+            for (int n = 0; n < 2; n++) {
                 penaltyCards.add(deckCards.pop());
             }
         }

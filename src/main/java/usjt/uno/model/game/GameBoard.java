@@ -1,9 +1,8 @@
 package usjt.uno.model.game;
 
 import usjt.uno.model.entities.Bot;
-import usjt.uno.model.entities.Player;
+import usjt.uno.model.entities.player.Player;
 import usjt.uno.model.game.cards.Card;
-import usjt.uno.view.Color;
 
 import java.util.ArrayList;
 
