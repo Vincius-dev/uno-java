@@ -79,12 +79,6 @@ public class Printer
                     "Please enter the number of the players (1 < n < 8):  ");
     }
 
-
-    /**
-     * This method ask the player name
-     * 
-     * @param playerID : the player number
-     */
     public static void getPlayerName(int playerNum)
     {
         clear();
@@ -122,7 +116,7 @@ public class Printer
 
         System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.print(Color.getColorCodeString(Color.RESET) + "\t\t  " +
-                    "Hey " + Color.getColorCodeString(Color.BLACK_BRIGHT_B) +  player.getFirstName() + 
+                    "Hey " + Color.getColorCodeString(Color.BLACK_BRIGHT_B) +  player.getPlayerName() +
                                 Color.getColorCodeString(Color.RESET) + 
                             " it's your turn. enter your pass to continue: ");
     }
@@ -187,7 +181,7 @@ public class Printer
         int cntr = 0;
         for (Player player: players)
         {
-            System.out.print("\t " + player.getFirstName() + ":  " + player.getNumberOfPlayerCards());
+            System.out.print("\t " + player.getPlayerName() + ":  " + player.getNumberOfPlayerCards());
 
             if (cntr == 0 && (currentPlayerIndex == (players.size()-1)))
                 System.out.print("\t---> (next player)");
@@ -243,7 +237,7 @@ public class Printer
     public static void getPlayerChoice(Player player)
     {
         System.out.print("\nhey " + Color.getColorCodeString(Color.BLACK_BRIGHT_B) +
-                            player.getFirstName() + Color.getColorCodeString(Color.RESET) +
+                            player.getPlayerName() + Color.getColorCodeString(Color.RESET) +
                                 " choose a Card (enter the code of your choosen card):  ");
     }
 
@@ -262,7 +256,7 @@ public class Printer
         {
             currPlayer = players.get(index);
             System.out.printf("%s\b\b\b\b\b\b%13s :  %7d                      %8d\n", INDENT, 
-                                                                        currPlayer.getFirstName(), 
+                                                                        currPlayer.getPlayerName(),
                                                                         currPlayer.getScore(),  
                                                                         currPlayer.getNumberOfPlayerCards());
         }
