@@ -1,16 +1,10 @@
 package usjt.uno.view;
 
-
 /**
  * an {@code enum} of card colors. 
  * 0: black, 1: red, 2: yellow, 3: green, 4: blue
- * 
- * 
- * @author Mohammad Mahdi Malmasi
- * @version 0.2.0
  */
-public enum Color 
-{
+public enum Color {
     // text colors
     BLACK, RED, YELLOW, GREEN, BLUE, WHITE,
 
@@ -22,8 +16,7 @@ public enum Color
 
     // hold the ansi code of the colors
     private String colorCodeString;
-    static 
-    {
+    static {
         // text colors
         BLACK.colorCodeString = "\033[0;30m";
         RED.colorCodeString = "\033[0;91m";
@@ -45,29 +38,19 @@ public enum Color
         RESET.colorCodeString = "\033[92;40m";
     }
 
-
     /**
      * This method return the ANSI code of the given color
-     * 
-     * @param color : the color that you want its ANSI code
-     * @return the ANSI code of the color
      */
     public static String getColorCodeString(Color color)
     {
         return color.colorCodeString;
     }
 
-
     /**
      * This method the background color of the input text color
-     * 
-     * @param textColor : the color that you want 
-     * @return the background color
      */
-    public static Color getBackgroundColor(Color textColor)
-    {
-        switch (textColor)
-        {
+    public static Color getBackgroundColor(Color textColor) {
+        switch (textColor) {
             case RED:
                 return RED_B;
 

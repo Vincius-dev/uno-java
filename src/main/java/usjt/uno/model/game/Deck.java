@@ -6,18 +6,14 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Deck {
-    private int iSize;
-    private Card iStack[];
+    private final int iSize;
+    private final Card[] iStack;
     public int iPointerPosition;
 
     public Deck() {
         iSize = 200;
         iPointerPosition = 0;
         iStack = new Card[iSize];
-    }
-
-    public int size(){
-        return iPointerPosition;
     }
 
     public Card top(){
@@ -28,11 +24,9 @@ public class Deck {
         }
     }
 
-    public Card push(Card cardToAdd){
-        if ( iPointerPosition >= iSize){
-            return null;
-        } else {
-            return iStack[iPointerPosition++] = cardToAdd;
+    public void push(Card cardToAdd){
+        if (iPointerPosition <= iSize) {
+            iStack[iPointerPosition++] = cardToAdd;
         }
     }
 
