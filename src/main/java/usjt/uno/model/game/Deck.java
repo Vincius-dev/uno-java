@@ -11,7 +11,7 @@ public class Deck {
     public int iPointerPosition;
 
     public Deck() {
-        iSize = 140;
+        iSize = 200;
         iPointerPosition = 0;
         iStack = new Card[iSize];
     }

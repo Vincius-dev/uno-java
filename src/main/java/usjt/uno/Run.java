@@ -46,35 +46,16 @@ public class Run
 
             switch (holdInput) {
                 case "1":
-                    // while the plahyer choose a valid int
-                    while (true) {
-                        // get the player choice
-                        Printer.getNumberOfThePlayers();
-                        holdInput = inputs.nextLine();
-
-                        // check the player input
-                        if (holdInput.length() == 1 && holdInput.charAt(0) > '0' && holdInput.charAt(0) < '8')
-                            break;
-                        else 
-                            Printer.inValidInputError(inputs);
-                    }
-
                     // set the number of the players
-                    numberOfPlayers = (int)holdInput.charAt(0) - (int)'0';
+                    numberOfPlayers = 4;
+
+                    Printer.getPlayerName();
+                    newPlayerName = inputs.nextLine();
+                    Rules.addPlayer(new Player(newPlayerName));
 
                     // get the players detials
-                    for (int n = 0; n < numberOfPlayers; n++) {
-                        // get the player name
-                        Printer.getPlayerName(n+1);
-                        newPlayerName = inputs.nextLine();
-
-                        if (newPlayerName.toLowerCase().equals("bot")) {
-                            // creat a bot
-                            Rules.addPlayer(new Bot(n));
-                        } else {
-                            // creat new player
-                            Rules.addPlayer(new Player(newPlayerName));
-                        }
+                    for (int n = 0; n < 3; n++) {
+                        Rules.addPlayer(new Bot(n));
                     }
                     
                     // get the cards to the players
