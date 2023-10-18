@@ -20,8 +20,7 @@ public class Run
     // for get the players inputs
     private static Scanner inputs = new Scanner(System.in);
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         // calibrate the font size of the terminal
         Printer.calibrate(inputs);
 
@@ -31,11 +30,9 @@ public class Run
         String newPlayerName, newPlayerPass; // get the new player details
 
         // while player choose exit option 
-        while (true)
-        {
+        while (true) {
             // while player choose valid option
-            while (true)
-            {
+            while (true) {
                 // show the game menu tho the player and get his/her choice
                 Printer.printMenu();
                 holdInput = inputs.nextLine();
@@ -47,14 +44,10 @@ public class Run
                     Printer.inValidInputError(inputs);
             }
 
-
-            switch (holdInput)
-            {
+            switch (holdInput) {
                 case "1":
-
                     // while the plahyer choose a valid int
-                    while (true)
-                    {
+                    while (true) {
                         // get the player choice
                         Printer.getNumberOfThePlayers();
                         holdInput = inputs.nextLine();
@@ -66,35 +59,23 @@ public class Run
                             Printer.inValidInputError(inputs);
                     }
 
-
                     // set the number of the players
                     numberOfPlayers = (int)holdInput.charAt(0) - (int)'0';
 
                     // get the players detials
-                    for (int n = 0; n < numberOfPlayers; n++)
-                    {
+                    for (int n = 0; n < numberOfPlayers; n++) {
                         // get the player name
                         Printer.getPlayerName(n+1);
                         newPlayerName = inputs.nextLine();
 
-
-                        if (newPlayerName.toLowerCase().equals("bot"))
-                        {
+                        if (newPlayerName.toLowerCase().equals("bot")) {
                             // creat a bot
                             Rules.addPlayer(new Bot(n));
-                        }
-                        else 
-                        {
-                            // get the player password
-                            Printer.getPlayerPass(newPlayerName);
-                            newPlayerPass = inputs.nextLine();
-
-                    
+                        } else {
                             // creat new player
                             Rules.addPlayer(new Player(newPlayerName));
                         }
                     }
-
                     
                     // get the cards to the players
                     Rules.preparationGameCards();
