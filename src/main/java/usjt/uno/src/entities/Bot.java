@@ -1,16 +1,18 @@
-package usjt.uno.model.entities;
+package usjt.uno.src.entities;
 
-import usjt.uno.model.entities.player.Player;
-import usjt.uno.model.game.Rules;
-import usjt.uno.model.game.cards.Card;
-import usjt.uno.model.game.cards.especialcards.WildCard;
-import usjt.uno.model.game.cards.especialcards.WildDrawCard;
+import usjt.uno.src.cards.Card;
+
+import usjt.uno.src.cards.especialcards.WildCard;
+import usjt.uno.src.cards.especialcards.WildDrawCard;
+import usjt.uno.src.usecase.GameUseCase;
 import usjt.uno.view.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Bot extends Player {
+
+    private GameUseCase gameUseCase;
 
     public Bot(int num)
     {
@@ -21,7 +23,7 @@ public class Bot extends Player {
         Card botChoosenCard = null;
         for (int n = 0; n < super.getPlayerCards().size(); n++) {
             botChoosenCard = super.getPlayerCards().get(n);
-            if (Rules.checkChoose(botChoosenCard, this)) {
+            if (gameUseCase.checkChoose(botChoosenCard, this)) {
                 this.getPlayerCards().remove(botChoosenCard);
                 score -= botChoosenCard.getCardScore();
                 break;
@@ -33,24 +35,24 @@ public class Bot extends Player {
             Random rand = new Random();
             switch (rand.nextInt(4)+1) {
                 case 1:
-                    Rules.applyChoose(botChoosenCard, Color.RED);
+                    gameUseCase.applyChoose(botChoosenCard, Color.RED);
                 break;
 
                 case 2:
-                    Rules.applyChoose(botChoosenCard, Color.YELLOW);
+                    gameUseCase.applyChoose(botChoosenCard, Color.YELLOW);
                 break;
 
                 case 3:
-                    Rules.applyChoose(botChoosenCard, Color.GREEN);
+                    gameUseCase.applyChoose(botChoosenCard, Color.GREEN);
                 break;
 
                 case 4:
-                    Rules.applyChoose(botChoosenCard, Color.BLUE);
+                    gameUseCase.applyChoose(botChoosenCard, Color.BLUE);
                 break;
             }
         }
         else
-            Rules.applyChoose(botChoosenCard, botChoosenCard.getCardColor());
+            gameUseCase.applyChoose(botChoosenCard, botChoosenCard.getCardColor());
 
         // wild draw case
         if (botChoosenCard instanceof WildDrawCard) {

@@ -1,26 +1,28 @@
 package usjt.uno;
 
-import usjt.uno.model.entities.Bot;
-import usjt.uno.model.entities.player.Player;
-import usjt.uno.model.game.Rules;
+import usjt.uno.src.entities.Bot;
+import usjt.uno.src.entities.Player;
+import usjt.uno.src.usecase.GameUseCase;
 import usjt.uno.view.Printer;
 
 import java.util.Scanner;
 
-/**
- * The main class of the game.
- * This game designed for UNIX bash !. 
- * (may not work on windows)
- * 
- * @author Mohammad Mahdi Malmasi
- * @version 0.1.0 
- */
+
 public class Run 
 {
     // for get the players inputs
     private static Scanner inputs = new Scanner(System.in);
 
+    private static GameUseCase gameUseCase;
+
+    public Run(GameUseCase gameUseCase) {
+        this.gameUseCase = gameUseCase;
+    }
+
+
     public static void main(String[] args) {
+
+
         // calibrate the font size of the terminal
         Printer.calibrate(inputs);
 
@@ -33,7 +35,7 @@ public class Run
         while (true) {
             // while player choose valid option
             while (true) {
-                // show the game menu tho the player and get his/her choice
+                // show the cards menu tho the player and get his/her choice
                 Printer.printMenu();
                 holdInput = inputs.nextLine();
 
@@ -51,22 +53,22 @@ public class Run
 
                     Printer.getPlayerName();
                     newPlayerName = inputs.nextLine();
-                    Rules.addPlayer(new Player(newPlayerName));
+                    gameUseCase.addPlayer(new Player(newPlayerName));
 
                     // get the players detials
                     for (int n = 0; n < 3; n++) {
-                        Rules.addPlayer(new Bot(n));
+                        gameUseCase.addPlayer(new Bot(n));
                     }
                     
                     // get the cards to the players
-                    Rules.preparationGameCards();
-                    Rules.distributeCards();
+                    gameUseCase.preparationGameCards();
+                    gameUseCase.distributeCards();
 
-                    // run the game
-                    Rules.runGame(inputs);
+                    // run the cards
+                    gameUseCase.runGame(inputs);
 
-                    // reset the game
-                    Rules.reset();
+                    // reset the cards
+                    gameUseCase.reset();
 
                 break;
 

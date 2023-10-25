@@ -1,7 +1,7 @@
-package usjt.uno.model.entities.player;
+package usjt.uno.src.entities;
 
 import lombok.Data;
-import usjt.uno.model.game.cards.Card;
+import usjt.uno.src.cards.Card;
 
 import java.util.ArrayList;
 

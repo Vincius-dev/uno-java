@@ -1,4 +1,4 @@
-package usjt.uno.model.game.cards;
+package usjt.uno.src.cards;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

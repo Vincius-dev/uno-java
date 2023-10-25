@@ -1,6 +1,6 @@
-package usjt.uno.model.game;
+package usjt.uno.src.entities;
 
-import usjt.uno.model.game.cards.Card;
+import usjt.uno.src.cards.Card;
 
 import java.util.Arrays;
 import java.util.Random;

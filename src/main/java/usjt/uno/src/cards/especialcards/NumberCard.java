@@ -1,8 +1,8 @@
-package usjt.uno.model.game.cards.especialcards;
+package usjt.uno.src.cards.especialcards;
 
 
 import lombok.Getter;
-import usjt.uno.model.game.cards.Card;
+import usjt.uno.src.cards.Card;
 import usjt.uno.view.Color;
 
 public class NumberCard extends Card {

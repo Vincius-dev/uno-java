@@ -1,12 +1,11 @@
-package usjt.uno.model.game.cards.especialcards;
+package usjt.uno.src.cards.especialcards;
 
-
-import usjt.uno.model.game.cards.Card;
+import usjt.uno.src.cards.Card;
 import usjt.uno.view.Color;
 
-public class Draw2Card extends Card {
+public class ReverseCard extends Card {
 
-    public Draw2Card(Color cardColor, int cardCode) {
+    public ReverseCard(Color cardColor, int cardCode) {
         super(20, cardColor, cardCode);
     }
 
@@ -25,7 +24,7 @@ public class Draw2Card extends Card {
                         Color.getColorCodeString(Color.RESET);
 
             case 2:
-                return cardColorCode + "|+2     |" +
+                return cardColorCode + "|->     |" +
                         Color.getColorCodeString(Color.RESET);
 
             case 3:
@@ -34,11 +33,11 @@ public class Draw2Card extends Card {
                         Color.getColorCodeString(Color.RESET);
 
             case 4:
-                return cardColorCode + "| Draw2 |" +
+                return cardColorCode + "|Reverse|" +
                         Color.getColorCodeString(Color.RESET);
 
             case 6:
-                return cardColorCode + "|     +2|" + 
+                return cardColorCode + "|     <-|" + 
                         Color.getColorCodeString(Color.RESET);
 
             case 8:
