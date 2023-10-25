@@ -7,14 +7,6 @@ import usjt.uno.view.Printer;
 
 import java.util.Scanner;
 
-/**
- * The main class of the game.
- * This game designed for UNIX bash !. 
- * (may not work on windows)
- * 
- * @author Mohammad Mahdi Malmasi
- * @version 0.1.0 
- */
 public class Run 
 {
     // for get the players inputs
