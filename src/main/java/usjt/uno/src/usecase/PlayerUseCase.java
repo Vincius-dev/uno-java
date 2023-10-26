@@ -15,4 +15,5 @@ public interface PlayerUseCase {
     int setIndex(Card playerChoosenCard, int currentPlayerindex,ArrayList<Player> players);
     boolean addPlayer(Player playerToAdd,ArrayList<Player> players);
 
+
 }

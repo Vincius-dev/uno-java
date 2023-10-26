@@ -10,6 +10,7 @@ import usjt.uno.view.Color;
 import java.util.ArrayList;
 
 public class CardsUseCaseImpl implements CardsUseCase{
+
     @Override
     public void makeGameCards(Deck deckCards) {
         // the code of the cards

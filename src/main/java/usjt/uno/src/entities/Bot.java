@@ -5,6 +5,7 @@ import usjt.uno.src.cards.Card;
 import usjt.uno.src.cards.especialcards.WildCard;
 import usjt.uno.src.cards.especialcards.WildDrawCard;
 import usjt.uno.src.usecase.GameUseCase;
+import usjt.uno.src.usecase.impl.GameUseCaseImpl;
 import usjt.uno.view.Color;
 
 import java.util.ArrayList;
@@ -12,11 +13,11 @@ import java.util.Random;
 
 public class Bot extends Player {
 
-    private GameUseCase gameUseCase;
+    private GameUseCaseImpl gameUseCase;
 
-    public Bot(int num)
-    {
+    public Bot(int num, GameUseCaseImpl gameUseCase) {
         super("Bot"+num);
+        this.gameUseCase = gameUseCase;
     }
 
     public Card playTurn(ArrayList<Player> players, ArrayList<Card> penaltyCards, int botIndex) {

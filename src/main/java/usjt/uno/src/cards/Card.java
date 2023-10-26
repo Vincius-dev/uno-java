@@ -11,6 +11,12 @@ public class Card {
     private Color cardColor;
     private int cardCode;
 
+    public Card(){
+        cardScore = 0;
+        cardColor = Color.WHITE;
+        cardCode = 0;
+    }
+
     @Override
     public boolean equals(Object obj) 
     {

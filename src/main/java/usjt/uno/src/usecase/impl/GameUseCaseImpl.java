@@ -1,5 +1,7 @@
 package usjt.uno.src.usecase.impl;
 
+import lombok.Data;
+import lombok.Getter;
 import usjt.uno.src.cards.Card;
 import usjt.uno.src.cards.especialcards.*;
 import usjt.uno.src.entities.Bot;
@@ -15,19 +17,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GameUseCaseImpl implements GameUseCase {
-
-
     private static ArrayList<Player> players = new ArrayList<>();
     private static Deck deckCards = new Deck();
-    private static Card boardCard;
+    private static Card boardCard = new Card();
     private static Color boardColor;
     private static ArrayList<Card> penaltyCards = new ArrayList<>();
     private PlayerUseCase playerUseCase;
     private CardsUseCase cardsUseCase;
 
-    public GameUseCaseImpl(PlayerUseCase playerUseCase, CardsUseCase cardsUseCase) {
-        this.playerUseCase = playerUseCase;
-        this.cardsUseCase = cardsUseCase;
+    public GameUseCaseImpl() {
+        this.playerUseCase = new PlayerUseCaseImpl(this);
+        this.cardsUseCase = new CardsUseCaseImpl();
     }
 
 

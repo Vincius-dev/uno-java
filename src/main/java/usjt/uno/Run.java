@@ -3,28 +3,25 @@ package usjt.uno;
 import usjt.uno.src.entities.Bot;
 import usjt.uno.src.entities.Player;
 import usjt.uno.src.usecase.GameUseCase;
+import usjt.uno.src.usecase.impl.GameUseCaseImpl;
 import usjt.uno.view.Printer;
 
 import java.util.Scanner;
 
 
-public class Run 
+public class Run
 {
     // for get the players inputs
     private static Scanner inputs = new Scanner(System.in);
 
-    private static GameUseCase gameUseCase;
-
-    public Run(GameUseCase gameUseCase) {
-        this.gameUseCase = gameUseCase;
-    }
+    private static GameUseCaseImpl gameUseCase;
 
 
     public static void main(String[] args) {
-
-
         // calibrate the font size of the terminal
         Printer.calibrate(inputs);
+
+        gameUseCase = new GameUseCaseImpl();
 
         //  * required variables *
         String holdInput; // hold the input to check that its valid or not
@@ -57,9 +54,10 @@ public class Run
 
                     // get the players detials
                     for (int n = 0; n < 3; n++) {
-                        gameUseCase.addPlayer(new Bot(n));
+                        gameUseCase.addPlayer(new Bot(n, gameUseCase));
                     }
-                    
+
+
                     // get the cards to the players
                     gameUseCase.preparationGameCards();
                     gameUseCase.distributeCards();

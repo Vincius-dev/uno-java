@@ -3,10 +3,13 @@ package usjt.uno.src.usecase.impl;
 import usjt.uno.src.cards.Card;
 import usjt.uno.src.cards.especialcards.ReverseCard;
 import usjt.uno.src.cards.especialcards.SkipCard;
+import usjt.uno.src.cards.especialcards.WildCard;
 import usjt.uno.src.cards.especialcards.WildDrawCard;
 import usjt.uno.src.entities.Deck;
 import usjt.uno.src.entities.Player;
+import usjt.uno.src.usecase.GameUseCase;
 import usjt.uno.src.usecase.PlayerUseCase;
+import usjt.uno.view.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,6 +18,11 @@ public class PlayerUseCaseImpl implements PlayerUseCase {
 
 
     private GameUseCaseImpl gameUseCase;
+
+
+    public PlayerUseCaseImpl(GameUseCaseImpl gameUseCase){
+        this.gameUseCase = gameUseCase;
+    }
 
 
     @Override
