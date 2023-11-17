@@ -22,6 +22,41 @@ public class PlayerList {
         this.size++;
     }
 
+    public void playerPlayed(){
+
+        System.out.println(head.getPlayer().getPlayerName() + " fez sua jogada.");
+
+        PlayerNode secondPlayer = this.head.getNextPlayer();
+        System.out.println("Agora " + secondPlayer.getPlayer().getPlayerName() + " é o próximo.");
+
+        insertNewPlayer(head.getPlayer());
+
+        this.head = secondPlayer;
+        this.size--;
+    }
+
+    public void reverseList() {
+        if (size <= 1) {
+            return;
+        }
+
+        PlayerNode prev = null;
+        PlayerNode current = head;
+        PlayerNode next;
+
+        while (current != null) {
+            next = current.getNextPlayer();
+            current.setNextPlayer(prev);
+            prev = current;
+            current = next;
+        }
+
+        lastPlayer = head;
+        head = prev;
+
+        System.out.println("Ordem dos jogadores foi invertida!");
+    }
+
     @Override
     public String toString() {
         if (this.size == 0){

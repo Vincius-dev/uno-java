@@ -17,5 +17,16 @@ public class Testes {
 
         System.out.println(playerList);
 
+        playerList.playerPlayed();
+        System.out.println(playerList);
+
+        playerList.playerPlayed();
+        System.out.println(playerList);
+
+        playerList.reverseList();
+        System.out.println(playerList);
+
+        playerList.reverseList();
+        System.out.println(playerList);
     }
 }
