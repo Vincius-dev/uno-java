@@ -1,67 +1,87 @@
 package usjt.uno.src.usecase.impl;
 
 import usjt.uno.src.cards.especialcards.*;
+import usjt.uno.src.entities.GameBoard;
 import usjt.uno.src.entities.Player;
 import usjt.uno.src.entities.Deck;
 import usjt.uno.src.cards.Card;
+import usjt.uno.src.entities.PlayerList.PlayerList;
+import usjt.uno.src.entities.PlayerList.PlayerNode;
 import usjt.uno.src.usecase.CardsUseCase;
 import usjt.uno.view.Color;
 
 import java.util.ArrayList;
 
 public class CardsUseCaseImpl implements CardsUseCase{
-
     @Override
-    public void makeGameCards(Deck deckCards) {
+    public void makeGameCards(GameBoard gameBoard) {
         // the code of the cards
         int cardCode = 0;
 
         // make red cards
-        makeCards(Color.RED, cardCode,deckCards);
+        makeCards(Color.RED, cardCode,gameBoard.getDeckCards());
         cardCode += 25;
 
         // make yellow cards
-        makeCards(Color.YELLOW, cardCode,deckCards);
+        makeCards(Color.YELLOW, cardCode,gameBoard.getDeckCards());
         cardCode += 25;
 
         // make green cards
-        makeCards(Color.GREEN, cardCode,deckCards);
+        makeCards(Color.GREEN, cardCode,gameBoard.getDeckCards());
         cardCode += 25;
 
         // make blue cards
-        makeCards(Color.BLUE, cardCode,deckCards);
+        makeCards(Color.BLUE, cardCode,gameBoard.getDeckCards());
         cardCode += 25;
 
 
         // make wild cards
         for (int n = 0; n < 4; n++)
-            deckCards.push(new WildCard(++cardCode));
+            gameBoard.getDeckCards().push(new WildCard(++cardCode));
 
         // make wild draw cards
         for (int n = 0; n < 4; n++)
-            deckCards.push(new WildDrawCard(++cardCode));
+            gameBoard.getDeckCards().push(new WildDrawCard(++cardCode));
+
+        System.out.println("Tamanho do deck:" + gameBoard.getDeckCards().size());
     }
 
     @Override
     public void suffleCards(Deck deckCards) {
         deckCards.shuffle();
+        System.out.println("As cartas foram embaralhadas");
     }
 
     @Override
-    public void distributeCards(Deck deckCards, ArrayList<Player> players, Card boardCard, Color boardColor) {
+    public void distributeCards(Deck deckCards, PlayerList players) {
         for (int n = 0; n < 7; n++) {
-            for (Player p: players) {
-                p.addCard(deckCards.pop());
+
+            PlayerNode pAtual = players.getHead();
+            for (int i = 0; i < players.getSize(); i++){
+
+                pAtual.getPlayer().addCard(deckCards.pop());
+
+                pAtual = pAtual.getNextPlayer();
             }
         }
+    }
 
-        while (!(deckCards.top() instanceof NumberCard)) {
-            boardCard = deckCards.pop();
-            deckCards.push(boardCard);
+    @Override
+    public void setBoard(GameBoard gameBoard) {
+
+        System.out.println("\n Colocando as cartas na mesa...");
+
+        while (!(gameBoard.getDeckCards().top() instanceof NumberCard)) {
+            gameBoard.getDeckCards().pop();
         }
 
-        boardCard = deckCards.pop();
-        boardColor = Color.getBackgroundColor(boardCard.getCardColor());
+        gameBoard.setBoardCard(gameBoard.getDeckCards().pop());
+        gameBoard.setBoardColor(Color.getBackgroundColor(gameBoard.getBoardCard().getCardColor()));
+
+        System.out.println("Carta que esta virada para cima: " + gameBoard.getBoardCard());
+        System.out.println("Cor da carta: " + gameBoard.getBoardColor());
+        System.out.println("\n Quantidade de cartas do baralho: "+ gameBoard.getDeckCards().size());
+
     }
 
     private static void makeCards(Color cardColor, int cardCode, Deck deckCards) {

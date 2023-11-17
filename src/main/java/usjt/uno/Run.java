@@ -2,7 +2,6 @@ package usjt.uno;
 
 import usjt.uno.src.entities.Bot;
 import usjt.uno.src.entities.Player;
-import usjt.uno.src.usecase.GameUseCase;
 import usjt.uno.src.usecase.impl.GameUseCaseImpl;
 import usjt.uno.view.Printer;
 
@@ -43,8 +42,7 @@ public class Run {
                         gameUseCase.addPlayer(new Bot(n, gameUseCase));
                     }
 
-                    gameUseCase.preparationGameCards(); //Prepara o Deck com as cartas
-                    gameUseCase.distributeCards(); //Distribui as cartas para os jogadores
+                    gameUseCase.preparationGameBoard();
 
                     gameUseCase.runGame(inputs);//Inicia jogo
 

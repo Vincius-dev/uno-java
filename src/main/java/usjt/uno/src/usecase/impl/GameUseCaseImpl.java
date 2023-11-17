@@ -4,142 +4,124 @@ import usjt.uno.src.cards.Card;
 import usjt.uno.src.cards.especialcards.*;
 import usjt.uno.src.entities.Bot;
 import usjt.uno.src.entities.Deck;
+import usjt.uno.src.entities.GameBoard;
 import usjt.uno.src.entities.Player;
+import usjt.uno.src.entities.PlayerList.PlayerList;
+import usjt.uno.src.entities.PlayerList.PlayerNode;
 import usjt.uno.src.usecase.CardsUseCase;
 import usjt.uno.src.usecase.GameUseCase;
 import usjt.uno.src.usecase.PlayerUseCase;
 import usjt.uno.view.Color;
 import usjt.uno.view.Printer;
 
-import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class GameUseCaseImpl implements GameUseCase {
-    private static ArrayList<Player> players = new ArrayList<>();
-    private static Deck deckCards = new Deck();
-    private static Card boardCard = new Card();
-    private static Color boardColor;
-    private static ArrayList<Card> penaltyCards = new ArrayList<>();
-    private PlayerUseCase playerUseCase;
-    private CardsUseCase cardsUseCase;
+    private static PlayerList players = new PlayerList();
+    private GameBoard gameBoard;
+    private final PlayerUseCase playerUseCase;
+    private final CardsUseCase cardsUseCase;
 
     public GameUseCaseImpl() {
         this.playerUseCase = new PlayerUseCaseImpl(this);
         this.cardsUseCase = new CardsUseCaseImpl();
+        this.gameBoard = new GameBoard();
     }
 
     @Override
     public void runGame(Scanner inputs) {
         Player currentPlayer;
-        int currentPlayerindex = playerUseCase.firstPlayer(players);
         Card playerChoosenCard;
         String holdInput;
         Bot bot;
 
         while (!endGame()) {
-            // set the current player
-            currentPlayer = players.get(currentPlayerindex);
+            currentPlayer = players.getHead().getPlayer();
+            System.out.println();
+            System.out.println("Jogador atual: " + currentPlayer.getPlayerName() + " Quantidade de cartas Cartas: " + currentPlayer.getPlayerCards().size());
 
-            // the draw2 case
-            if (penaltyCards.size() != 0) {
-                boolean check = false;
-                for (Card card : currentPlayer.getPlayerCards()) {
-                    if (card instanceof Draw2Card) {
-                        check = true;
-                        break;
-                    }
-                }
-
-                if (!check) {
-                    int n = penaltyCards.size();
-                    for (; n > 0; n--) {
-                        currentPlayer.addCard(penaltyCards.get(0));
-                        penaltyCards.remove(0);
-                    }
-                }
-
-                // go the the next player
-                currentPlayerindex = ((currentPlayerindex + 1) % players.size());
-                continue;
-            }
-
-            // check the player cards
+            //Verifica se tem cartas para jogar
             if (!playerUseCase.checkPlayerCards(currentPlayer)) {
-                // get a card to player
-                playerUseCase.giveCardToPlayer(currentPlayer, deckCards);
+                playerUseCase.giveCardToPlayer(currentPlayer, gameBoard.getDeckCards());
 
-                // check the player cards again
                 if (!playerUseCase.checkPlayerCards(currentPlayer)) {
-                    // show the board, number of the other players cards and current player cards
-                    Printer.printGameBoard(boardCard, boardColor);
-                    Printer.printNumberOfPlayersCards(players, currentPlayerindex);
+                    Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+                    Printer.printNumberOfPlayersCards(players);
                     Printer.printPlayerCards(currentPlayer);
 
-                    // say to player that he/she can't choose any card
                     if (!(currentPlayer instanceof Bot))
                         Printer.noChoiceError(inputs);
 
-                    // go the the next player
-                    currentPlayerindex = ((currentPlayerindex + 1) % players.size());
+                    players.playerPlayed();
                     continue;
                 }
             }
 
-            // it the current player is a bot
+            //Se for a vez de um bot
             if (currentPlayer instanceof Bot) {
                 bot = (Bot) currentPlayer;
-                playerChoosenCard = bot.playTurn(players, penaltyCards, currentPlayerindex);
 
-                // go to the next player
-                currentPlayerindex = playerUseCase.setIndex(playerChoosenCard, currentPlayerindex, players);
+                System.out.println();
+                Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+
+                System.out.println(currentPlayer.getPlayerName() + " esta pensando...");
+                Random rand = new Random();
+                int tempo = rand.nextInt(11) + 5; // Gera um número entre 0 e 10 e adiciona 5 para obter um número entre 5 e 15
+                tempo *= 1000; // Converte segundos para milissegundos
+
+                try {
+                    Thread.sleep(tempo);
+                    System.out.println("Passaram-se " + (tempo / 1000) + " segundos.");
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                    Thread.currentThread().interrupt();
+                }
+
+                Printer.printNumberOfPlayersCards(players);
+                Printer.printPlayerCards(currentPlayer);
+
+                playerChoosenCard = bot.playTurn();
+
+
+                playerUseCase.setIndex(playerChoosenCard, players);
+
+                System.out.println("O "+ currentPlayer.getPlayerName() + " jogou!");
                 continue;
             }
 
-            // while player choose a valid card
             while (true) {
-                // while player choose a valid card code
                 while (true) {
-                    // show the board, number of the other players cards and current player cards
-                    Printer.printGameBoard(boardCard, boardColor);
-                    Printer.printNumberOfPlayersCards(players, currentPlayerindex);
+                    Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+                    Printer.printNumberOfPlayersCards(players);
                     Printer.printPlayerCards(currentPlayer);
 
-                    // ask the player choice
                     Printer.getPlayerChoice(currentPlayer);
                     holdInput = inputs.nextLine();
 
-                    // check player choice
                     if (holdInput.length() > 0 && holdInput.length() < 4 && isInt(holdInput))
                         if (Integer.valueOf(holdInput) <= 108 && Integer.valueOf(holdInput) > 0)
                             if (currentPlayer.haveCard(Integer.valueOf(holdInput)))
                                 break;
 
-                    // say that player input is incorrect
                     Printer.inValidInputError(inputs);
                 }
 
-                // get player choosen card
                 playerChoosenCard = currentPlayer.removeCard(Integer.valueOf(holdInput));
 
-                // check the player choosen card
                 if (checkChoose(playerChoosenCard, currentPlayer)) {
                     if (playerChoosenCard instanceof WildCard || playerChoosenCard instanceof WildDrawCard) {
-                        // while player choose a currect input
                         while (true) {
-                            // ask the player choosen color
                             Printer.getPlayerChoosenColor();
                             holdInput = inputs.nextLine();
 
-                            // check the player input
                             if (holdInput.length() == 1 && holdInput.charAt(0) > '0' && holdInput.charAt(0) < '5')
                                 break;
 
-                            // say that player input is incorrect
                             Printer.inValidInputError(inputs);
 
-                            // show the board, number of the other players cards and current player cards
-                            Printer.printGameBoard(boardCard, boardColor);
-                            Printer.printNumberOfPlayersCards(players, currentPlayerindex);
+                            Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+                            Printer.printNumberOfPlayersCards(players);
                             Printer.printPlayerCards(currentPlayer);
                         }
 
@@ -173,33 +155,29 @@ public class GameUseCaseImpl implements GameUseCase {
                 Printer.inValidInputError(inputs);
             }
 
-            // wild draw case
+            int n = 0;
             if (playerChoosenCard instanceof WildDrawCard) {
-                int index = (currentPlayerindex + 1) % players.size();
-                int n = penaltyCards.size();
-
+                n = 4;
+            } else if (playerChoosenCard instanceof Draw2Card) {
+                n = 2;
+            }
+            if (n > 0){
                 for (; n > 0; n--) {
-                    players.get(index).addCard(penaltyCards.get(0));
-                    ;
-                    penaltyCards.remove(0);
+                    players.getHead().getNextPlayer().getPlayer().addCard(gameBoard.getDeckCards().pop());
                 }
             }
 
-            // go to the next player
-            currentPlayerindex = playerUseCase.setIndex(playerChoosenCard, currentPlayerindex, players);
+            playerUseCase.setIndex(playerChoosenCard, players);
         }
 
-        playerUseCase.sortPlayers(players);
         Printer.printScores(players, inputs);
     }
 
     @Override
     public boolean checkChoose(Card playerChoosenCard, Player player) {
-        // check the wild cards
         if (playerChoosenCard instanceof WildCard)
             return true;
 
-        // check the wild draw cards
         if (playerChoosenCard instanceof WildDrawCard) {
             for (Card card : player.getPlayerCards()) {
                 if (card instanceof WildDrawCard)
@@ -211,29 +189,24 @@ public class GameUseCaseImpl implements GameUseCase {
             return true;
         }
 
-        // check draw2 cards
-        if (boardCard instanceof Draw2Card && penaltyCards.size() != 0) {
+        if (gameBoard.getBoardCard() instanceof Draw2Card) {
             if (playerChoosenCard instanceof Draw2Card)
                 return true;
             else
                 return false;
         }
 
-        // revers card case
-        if (boardCard instanceof ReverseCard && playerChoosenCard instanceof ReverseCard)
+        if (gameBoard.getBoardCard() instanceof ReverseCard && playerChoosenCard instanceof ReverseCard)
             return true;
 
-        // check the color of cards
-        if (Color.getBackgroundColor(playerChoosenCard.getCardColor()) == boardColor)
+        if (Color.getBackgroundColor(playerChoosenCard.getCardColor()) == gameBoard.getBoardColor())
             return true;
 
-        // check the number of number cards
-        if (playerChoosenCard instanceof NumberCard && boardCard instanceof NumberCard)
-            if (playerChoosenCard.getCardScore() == boardCard.getCardScore())
+        if (playerChoosenCard instanceof NumberCard && gameBoard.getBoardCard() instanceof NumberCard)
+            if (playerChoosenCard.getCardScore() == gameBoard.getBoardCard().getCardScore())
                 return true;
 
-        // check the skip cards
-        if (playerChoosenCard instanceof SkipCard && boardCard instanceof SkipCard)
+        if (playerChoosenCard instanceof SkipCard && gameBoard.getBoardCard() instanceof SkipCard)
             return true;
 
         return false;
@@ -241,59 +214,42 @@ public class GameUseCaseImpl implements GameUseCase {
 
     @Override
     public void applyChoose(Card playerChoosenCard, Color choosenColor) {
-        changeBoardCard(playerChoosenCard);
-        boardColor = Color.getBackgroundColor(choosenColor);
-
-        if (playerChoosenCard instanceof WildDrawCard) {
-            for (int n = 0; n < 4; n++) {
-                penaltyCards.add(deckCards.pop());
-            }
-        } else if (playerChoosenCard instanceof Draw2Card) {
-            for (int n = 0; n < 2; n++) {
-                penaltyCards.add(deckCards.pop());
-            }
-        }
+        gameBoard.setBoardCard(playerChoosenCard);
+        gameBoard.setBoardColor(Color.getBackgroundColor(choosenColor));
     }
 
     @Override
-    public boolean addPlayer(Player playerToAdd) {
-        return playerUseCase.addPlayer(playerToAdd, players);
+    public void addPlayer(Player playerToAdd) {
+        playerUseCase.addPlayer(playerToAdd, players);
     }
 
     @Override
-    public void preparationGameCards() {
-        cardsUseCase.makeGameCards(deckCards);
-        cardsUseCase.suffleCards(deckCards);
-    }
+    public void preparationGameBoard() {
+        cardsUseCase.makeGameCards(gameBoard);
+        cardsUseCase.suffleCards(gameBoard.getDeckCards());
 
-    @Override
-    public void distributeCards() {
-        cardsUseCase.distributeCards(deckCards,players,boardCard, boardColor);
+        cardsUseCase.setBoard(gameBoard);
+        cardsUseCase.distributeCards(gameBoard.getDeckCards(), players);
     }
 
     @Override
     public void reset() {
-        players = new ArrayList<>();
-        deckCards = new Deck();
-        penaltyCards = new ArrayList<>();
+        players = new PlayerList();
+        gameBoard.setDeckCards(new Deck());
     }
 
-
     private static boolean endGame() {
-        for (Player player : players) {
-            if (player.getNumberOfPlayerCards() == 0)
+        PlayerNode pAtual = players.getHead();
+        for (int i = 0; i < players.getSize() - 1; i++){
+            if (pAtual.getPlayer().getNumberOfPlayerCards() == 0)
                 return true;
+
+            pAtual = pAtual.getNextPlayer();
         }
 
         return false;
     }
 
-    private static void changeBoardCard(Card newCard) {
-        deckCards.push(boardCard);
-        boardCard = newCard;
-    }
-
-    // this method check that the given string can refer to a int or not
     private static boolean isInt(String stringToCheck) {
         for (int n = 0; n < stringToCheck.length(); n++) {
             if (!('0' <= stringToCheck.charAt(n) && stringToCheck.charAt(0) <= '9'))

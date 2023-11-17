@@ -2,20 +2,15 @@ package usjt.uno.src.cards;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import usjt.uno.view.Color;
 
-@Getter @AllArgsConstructor
+@Getter @AllArgsConstructor @ToString
 public class Card {
 
     private int cardScore;
     private Color cardColor;
     private int cardCode;
-
-    public Card(){
-        cardScore = 0;
-        cardColor = Color.WHITE;
-        cardCode = 0;
-    }
 
     @Override
     public boolean equals(Object obj) 

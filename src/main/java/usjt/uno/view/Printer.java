@@ -2,6 +2,8 @@ package usjt.uno.view;
 
 import usjt.uno.src.entities.Player;
 import usjt.uno.src.cards.Card;
+import usjt.uno.src.entities.PlayerList.PlayerList;
+import usjt.uno.src.entities.PlayerList.PlayerNode;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -30,7 +32,6 @@ public class Printer {
         System.out.println(INDENT + "\t      " + "            2. Sair");
         System.err.println(INDENT + "\t       " + "🀄️ <@••••••••••••••••••••••••@> 🃏");
         System.out.print("\n\n");
-        System.out.print(  INDENT + "\t      " + "                0_0? ");
     }
 
     public static void getPlayerName() {
@@ -67,29 +68,29 @@ public class Printer {
             System.out.print("\n");
         }
 
-        System.out.print("\n\n\n");
+        System.out.print("\n");
     }
 
-    public static void printNumberOfPlayersCards(ArrayList<Player> players, int currentPlayerIndex) {
-        System.out.println("\nNumero de cartas dos jogadores:\n");
+    public static void printNumberOfPlayersCards(PlayerList players) {
+        System.out.println("\nOrdem Jogadores:\n");
 
         int cntr = 0;
-        for (Player player: players) {
-            System.out.print("\t " + player.getPlayerName() + ":  " + player.getNumberOfPlayerCards());
 
-            if (cntr == 0 && (currentPlayerIndex == (players.size()-1)))
-                System.out.print("\t---> (Próximo jogador)");
-
-            if (cntr == currentPlayerIndex)
+        PlayerNode pAtual = players.getHead();
+        for (int i = 0; i < players.getSize(); i++){
+            System.out.print("\t " + pAtual.getPlayer().getPlayerName() + " Qtd de cartas:  " + pAtual.getPlayer().getNumberOfPlayerCards());
+            if (cntr == 0) {
                 System.out.print("\t---> (Jogando agora)");
-            else if ((cntr-1) == currentPlayerIndex)
+            } else if (cntr == 1) {
                 System.out.print("\t---> (Próximo jogador)");
-
+            } else {
+                System.out.print("\t");
+            }
             System.out.print("\n");
-            cntr++;
-        }
 
-        System.out.print("\n\n");
+            cntr++;
+            pAtual = pAtual.getNextPlayer();
+        }
     }
 
     public static void printPlayerCards(Player player) {
@@ -100,8 +101,7 @@ public class Printer {
                     System.out.print(player.getPlayerCards().get(k).toString(i) + "  ");
                    
                     if (i == 8)
-                        //      space = lenght of the previous line - current line lenght 
-                        for(int space =  player.getPlayerCards().get(k).toString(i-1).length() - player.getPlayerCards().get(k).toString(i).length(); 
+                        for(int space =  player.getPlayerCards().get(k).toString(i-1).length() - player.getPlayerCards().get(k).toString(i).length();
                             space > 0; space--)
                             System.out.print(" ");
                 }
@@ -117,21 +117,22 @@ public class Printer {
                                 ", escolha uma carta (digite o codigo da carta escolhida):  ");
     }
 
-    public static void printScores(ArrayList<Player> players, Scanner finish) {
+    public static void printScores(PlayerList players, Scanner finish) {
         clear();
         System.out.print(Color.getColorCodeString(Color.WHITE)  + "\n\n\n\n\n\n\n");
 
-        System.out.println(INDENT + "\b\b\b\b\b\b     Nome |  Pontuação                             N° de Cartas");
+        System.out.println(INDENT + "\b\b\b\b\b\b     Nome |                                        N° de Cartas");
         System.out.println(INDENT + "\b\b\b\b\b\b–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––");
 
-        Player currPlayer;
-        for (int index = 0; index < players.size(); index++) {
-            currPlayer = players.get(index);
-            System.out.printf("%s\b\b\b\b\b\b%13s :  %7d                      %8d\n", INDENT, 
-                                                                        currPlayer.getPlayerName(),
-                                                                        currPlayer.getScore(),  
-                                                                        currPlayer.getNumberOfPlayerCards());
+        PlayerNode pAtual = players.getHead();
+        for (int i = 0; i < players.getSize() - 1; i++) {
+            System.out.printf("%s%13s :  %7d\n", INDENT,
+                    pAtual.getPlayer().getPlayerName(),
+                    pAtual.getPlayer().getNumberOfPlayerCards());
+
+            pAtual = pAtual.getNextPlayer();
         }
+
 
         System.out.print("\n\n\n\n" + Color.getColorCodeString(Color.RESET));
         finishEnter(finish);
@@ -154,13 +155,11 @@ public class Printer {
         finishEnter(finish);
     }
 
-    // this method wait until player push 'enter' bottom
     private static void finishEnter(Scanner inputsSource) {
         System.out.println(INDENT + "\t\t    " + "(digite enter para continuar)");
         inputsSource.nextLine();
     }
 
-    // this method clear the terminal
     private static void clear() {
         System.out.print("\033[H\033[2J");
         System.out.flush();

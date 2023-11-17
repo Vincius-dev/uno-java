@@ -7,13 +7,11 @@ import java.util.ArrayList;
 
 @Data
 public class Player {
-    protected int score;
     private String playerName;
     private ArrayList<Card> playerCards;
 
     public Player(String name) {
         this.playerName = name;
-        this.score = 0;
 
         playerCards = new ArrayList<>();
     }
@@ -23,7 +21,6 @@ public class Player {
     }
 
     public void addCard(Card cardToAdd) {
-        score += cardToAdd.getCardScore();
         playerCards.add(cardToAdd);
     }
 
@@ -38,7 +35,6 @@ public class Player {
             }
         } 
 
-        score -= cardToRemove.getCardScore();
         playerCards.remove(cardToRemove);
 
         return cardToRemove;
