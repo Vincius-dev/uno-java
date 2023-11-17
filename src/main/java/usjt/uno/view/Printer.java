@@ -72,7 +72,8 @@ public class Printer {
     }
 
     public static void printNumberOfPlayersCards(PlayerList players) {
-        System.out.println("\nOrdem Jogadores:\n");
+
+        System.out.println("\nOrdem Jogadores:");
 
         int cntr = 0;
 
@@ -94,6 +95,8 @@ public class Printer {
     }
 
     public static void printPlayerCards(Player player) {
+
+        System.out.println("\nSuas cartas:");
         for (int j = 0; j < player.getPlayerCards().size(); j += 9) {
             for (int i = 1; i <= 8; i++) {
                 System.out.print("\t\b");

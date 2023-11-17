@@ -13,4 +13,5 @@ public interface CardsUseCase {
     void suffleCards(Deck deckCards);
     void distributeCards(Deck deckCards, PlayerList players);
     void setBoard(GameBoard gameBoard);
+    void getCardsBackFromDiscart(GameBoard gameBoard);
 }

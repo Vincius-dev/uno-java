@@ -38,37 +38,53 @@ public class GameUseCaseImpl implements GameUseCase {
 
         while (!endGame()) {
             currentPlayer = players.getHead().getPlayer();
+
             System.out.println();
-            System.out.println("Jogador atual: " + currentPlayer.getPlayerName() + " Quantidade de cartas Cartas: " + currentPlayer.getPlayerCards().size());
+            System.out.println("É a vez do " + currentPlayer.getPlayerName());
+            System.out.println();
+
+            //Verifica se as cartas do monte acabaram
+            if (gameBoard.getDeckCards().size() == 0){
+                System.out.println("\n");
+                System.out.println("As cartas do monte acabaram, pegando as que estão no descarte...");
+
+                cardsUseCase.getCardsBackFromDiscart(gameBoard);
+                cardsUseCase.suffleCards(gameBoard.getDeckCards());
+            }
 
             //Verifica se tem cartas para jogar
             if (!playerUseCase.checkPlayerCards(currentPlayer)) {
                 playerUseCase.giveCardToPlayer(currentPlayer, gameBoard.getDeckCards());
 
-                if (!playerUseCase.checkPlayerCards(currentPlayer)) {
-                    Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
-                    Printer.printNumberOfPlayersCards(players);
-                    Printer.printPlayerCards(currentPlayer);
+                if (!playerUseCase.checkPlayerCards(currentPlayer)){
+                    if(currentPlayer instanceof Bot){
+                        Printer.printNumberOfPlayersCards(players);
+                        Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+                        System.out.println("O bot " + currentPlayer.getPlayerName() + " não possui castas para jogar");
+                    } else {
+                        System.out.println("Cartas no baralho: " + gameBoard.getDeckCards().size());
+                        System.out.println("Cartas no monte de descarte: " + gameBoard.getDiscartDeck().size());
+                        Printer.printNumberOfPlayersCards(players);
+                        Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
 
-                    if (!(currentPlayer instanceof Bot))
                         Printer.noChoiceError(inputs);
-
-                    players.playerPlayed();
-                    continue;
+                    }
                 }
+
+                players.playerPlayed();
+                continue;
             }
 
             //Se for a vez de um bot
             if (currentPlayer instanceof Bot) {
                 bot = (Bot) currentPlayer;
 
-                System.out.println();
-                Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+                Printer.printNumberOfPlayersCards(players);
 
                 System.out.println(currentPlayer.getPlayerName() + " esta pensando...");
                 Random rand = new Random();
-                int tempo = rand.nextInt(11) + 5; // Gera um número entre 0 e 10 e adiciona 5 para obter um número entre 5 e 15
-                tempo *= 1000; // Converte segundos para milissegundos
+                int tempo = rand.nextInt(10) + 20;
+                tempo *= 1000;
 
                 try {
                     Thread.sleep(tempo);
@@ -77,23 +93,25 @@ public class GameUseCaseImpl implements GameUseCase {
                     System.out.println(e);
                     Thread.currentThread().interrupt();
                 }
+                System.out.println("Cartas no baralho: " + gameBoard.getDeckCards().size());
+                System.out.println("Cartas no monte de descarte: " + gameBoard.getDiscartDeck().size());
 
-                Printer.printNumberOfPlayersCards(players);
                 Printer.printPlayerCards(currentPlayer);
 
                 playerChoosenCard = bot.playTurn();
 
 
                 playerUseCase.setIndex(playerChoosenCard, players);
-
-                System.out.println("O "+ currentPlayer.getPlayerName() + " jogou!");
+                Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
                 continue;
             }
 
             while (true) {
                 while (true) {
-                    Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
+                    System.out.println("Cartas no baralho: " + gameBoard.getDeckCards().size());
+                    System.out.println("Cartas no monte de descarte: " + gameBoard.getDiscartDeck().size());
                     Printer.printNumberOfPlayersCards(players);
+                    Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
                     Printer.printPlayerCards(currentPlayer);
 
                     Printer.getPlayerChoice(currentPlayer);
@@ -162,12 +180,13 @@ public class GameUseCaseImpl implements GameUseCase {
                 n = 2;
             }
             if (n > 0){
-                for (; n > 0; n--) {
+                for (int i = 0; i < n; i++) {
                     players.getHead().getNextPlayer().getPlayer().addCard(gameBoard.getDeckCards().pop());
                 }
             }
 
             playerUseCase.setIndex(playerChoosenCard, players);
+            Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
         }
 
         Printer.printScores(players, inputs);
@@ -214,7 +233,7 @@ public class GameUseCaseImpl implements GameUseCase {
 
     @Override
     public void applyChoose(Card playerChoosenCard, Color choosenColor) {
-        gameBoard.setBoardCard(playerChoosenCard);
+        gameBoard.getDiscartDeck().push(playerChoosenCard);
         gameBoard.setBoardColor(Color.getBackgroundColor(choosenColor));
     }
 

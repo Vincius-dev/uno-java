@@ -27,7 +27,6 @@ public class PlayerList {
         System.out.println(head.getPlayer().getPlayerName() + " fez sua jogada.");
 
         PlayerNode secondPlayer = this.head.getNextPlayer();
-        System.out.println("Agora " + secondPlayer.getPlayer().getPlayerName() + " é o próximo.");
 
         insertNewPlayer(head.getPlayer());
 

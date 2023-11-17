@@ -1,16 +1,13 @@
 package usjt.uno.src.usecase.impl;
 
+import usjt.uno.src.cards.Card;
 import usjt.uno.src.cards.especialcards.*;
 import usjt.uno.src.entities.GameBoard;
-import usjt.uno.src.entities.Player;
 import usjt.uno.src.entities.Deck;
-import usjt.uno.src.cards.Card;
 import usjt.uno.src.entities.PlayerList.PlayerList;
 import usjt.uno.src.entities.PlayerList.PlayerNode;
 import usjt.uno.src.usecase.CardsUseCase;
 import usjt.uno.view.Color;
-
-import java.util.ArrayList;
 
 public class CardsUseCaseImpl implements CardsUseCase{
     @Override
@@ -34,7 +31,6 @@ public class CardsUseCaseImpl implements CardsUseCase{
         makeCards(Color.BLUE, cardCode,gameBoard.getDeckCards());
         cardCode += 25;
 
-
         // make wild cards
         for (int n = 0; n < 4; n++)
             gameBoard.getDeckCards().push(new WildCard(++cardCode));
@@ -42,8 +38,6 @@ public class CardsUseCaseImpl implements CardsUseCase{
         // make wild draw cards
         for (int n = 0; n < 4; n++)
             gameBoard.getDeckCards().push(new WildDrawCard(++cardCode));
-
-        System.out.println("Tamanho do deck:" + gameBoard.getDeckCards().size());
     }
 
     @Override
@@ -75,13 +69,8 @@ public class CardsUseCaseImpl implements CardsUseCase{
             gameBoard.getDeckCards().pop();
         }
 
-        gameBoard.setBoardCard(gameBoard.getDeckCards().pop());
+        gameBoard.getDiscartDeck().push(gameBoard.getDeckCards().pop());
         gameBoard.setBoardColor(Color.getBackgroundColor(gameBoard.getBoardCard().getCardColor()));
-
-        System.out.println("Carta que esta virada para cima: " + gameBoard.getBoardCard());
-        System.out.println("Cor da carta: " + gameBoard.getBoardColor());
-        System.out.println("\n Quantidade de cartas do baralho: "+ gameBoard.getDeckCards().size());
-
     }
 
     private static void makeCards(Color cardColor, int cardCode, Deck deckCards) {
@@ -114,5 +103,18 @@ public class CardsUseCaseImpl implements CardsUseCase{
 
         deckCards.push(new Draw2Card(cardColor, ++cardCode));
         deckCards.push(new Draw2Card(cardColor, ++cardCode));
+    }
+
+    @Override
+    public void getCardsBackFromDiscart(GameBoard gameBoard) {
+        while (true){
+            Card cardFromDiscart = gameBoard.getDiscartDeck().pop();
+
+            if (cardFromDiscart != null){
+                gameBoard.getDeckCards().push(cardFromDiscart);
+            } else {
+                break;
+            }
+        }
     }
 }

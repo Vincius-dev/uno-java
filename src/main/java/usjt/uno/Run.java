@@ -42,7 +42,7 @@ public class Run {
                         gameUseCase.addPlayer(new Bot(n, gameUseCase));
                     }
 
-                    gameUseCase.preparationGameBoard();
+                    gameUseCase.preparationGameBoard(); //Prepara a mesa
 
                     gameUseCase.runGame(inputs);//Inicia jogo
 

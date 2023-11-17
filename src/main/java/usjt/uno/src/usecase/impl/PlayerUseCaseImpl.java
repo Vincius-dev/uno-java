@@ -1,6 +1,7 @@
 package usjt.uno.src.usecase.impl;
 
 import usjt.uno.src.cards.Card;
+import usjt.uno.src.cards.especialcards.Draw2Card;
 import usjt.uno.src.cards.especialcards.ReverseCard;
 import usjt.uno.src.cards.especialcards.SkipCard;
 import usjt.uno.src.cards.especialcards.WildDrawCard;
@@ -33,15 +34,25 @@ public class PlayerUseCaseImpl implements PlayerUseCase {
     @Override
     public void setIndex(Card playerChoosenCard, PlayerList players) {
         // Coringa ou bloqueio
-        if (playerChoosenCard instanceof SkipCard || playerChoosenCard instanceof WildDrawCard) {
+        if (playerChoosenCard instanceof SkipCard) {
             players.playerPlayed();
+            System.out.println();
+            System.out.println("O jogador " + players.getHead().getPlayer().getPlayerName() + " foi pulado!");
             players.playerPlayed();
         }
 
         // Reverso
         else if (playerChoosenCard instanceof ReverseCard) {
-            players.playerPlayed();
             revesePlayers(players);
+            players.playerPlayed();
+            System.out.println();
+            System.out.println("Ordem invertida!");
+        }
+
+        else if (playerChoosenCard instanceof Draw2Card) {
+            players.playerPlayed();
+            System.out.println();
+            System.out.println("Ordem invertida!");
         }
 
         // other cases

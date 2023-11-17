@@ -22,6 +22,7 @@ public class Bot extends Player {
     }
 
     public Card playTurn() {
+        System.out.println();
         Card botChoosenCard = null;
         for (int n = 0; n < super.getPlayerCards().size(); n++) {
             botChoosenCard = super.getPlayerCards().get(n);
