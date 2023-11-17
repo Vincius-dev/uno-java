@@ -9,34 +9,24 @@ import usjt.uno.view.Printer;
 import java.util.Scanner;
 
 
-public class Run
-{
-    // for get the players inputs
+public class Run {
     private static Scanner inputs = new Scanner(System.in);
 
     private static GameUseCaseImpl gameUseCase;
 
-
     public static void main(String[] args) {
-        // calibrate the font size of the terminal
         Printer.calibrate(inputs);
 
         gameUseCase = new GameUseCaseImpl();
 
-        //  * required variables *
-        String holdInput; // hold the input to check that its valid or not
-        int numberOfPlayers; // the number of the game players
-        String newPlayerName, newPlayerPass; // get the new player details
+        String holdInput;
+        String newPlayerName;
 
-        // while player choose exit option 
         while (true) {
-            // while player choose valid option
             while (true) {
-                // show the cards menu tho the player and get his/her choice
                 Printer.printMenu();
                 holdInput = inputs.nextLine();
 
-                // check the player input
                 if (holdInput.length() == 1 && (holdInput.charAt(0) == '1' || holdInput.charAt(0) == '2'))
                     break;
                 else 
@@ -45,29 +35,20 @@ public class Run
 
             switch (holdInput) {
                 case "1":
-                    // set the number of the players
-                    numberOfPlayers = 4;
-
                     Printer.getPlayerName();
                     newPlayerName = inputs.nextLine();
-                    gameUseCase.addPlayer(new Player(newPlayerName));
+                    gameUseCase.addPlayer(new Player(newPlayerName)); //Adiciona os jogadores
 
-                    // get the players detials
-                    for (int n = 0; n < 3; n++) {
+                    for (int n = 0; n < 3; n++) { //Adiciona os bots
                         gameUseCase.addPlayer(new Bot(n, gameUseCase));
                     }
 
+                    gameUseCase.preparationGameCards(); //Prepara o Deck com as cartas
+                    gameUseCase.distributeCards(); //Distribui as cartas para os jogadores
 
-                    // get the cards to the players
-                    gameUseCase.preparationGameCards();
-                    gameUseCase.distributeCards();
+                    gameUseCase.runGame(inputs);//Inicia jogo
 
-                    // run the cards
-                    gameUseCase.runGame(inputs);
-
-                    // reset the cards
                     gameUseCase.reset();
-
                 break;
 
                 case "2":

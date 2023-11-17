@@ -1,7 +1,5 @@
 package usjt.uno.src.usecase.impl;
 
-import lombok.Data;
-import lombok.Getter;
 import usjt.uno.src.cards.Card;
 import usjt.uno.src.cards.especialcards.*;
 import usjt.uno.src.entities.Bot;
@@ -30,14 +28,13 @@ public class GameUseCaseImpl implements GameUseCase {
         this.cardsUseCase = new CardsUseCaseImpl();
     }
 
-
     @Override
     public void runGame(Scanner inputs) {
-        Player currentPlayer; // hold the current player
-        int currentPlayerindex = playerUseCase.firstPlayer(players); // hold the current player index
-        Card playerChoosenCard; // hold the player choosen card
-        String holdInput; // hold the player inputs
-        Bot bot; // when bot want to play
+        Player currentPlayer;
+        int currentPlayerindex = playerUseCase.firstPlayer(players);
+        Card playerChoosenCard;
+        String holdInput;
+        Bot bot;
 
         while (!endGame()) {
             // set the current player

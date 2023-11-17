@@ -51,12 +51,10 @@ public class CardsUseCaseImpl implements CardsUseCase{
     public void distributeCards(Deck deckCards, ArrayList<Player> players, Card boardCard, Color boardColor) {
         for (int n = 0; n < 7; n++) {
             for (Player p: players) {
-                // get the card to the player
                 p.addCard(deckCards.pop());
             }
         }
 
-        // set the board card
         while (!(deckCards.top() instanceof NumberCard)) {
             boardCard = deckCards.pop();
             deckCards.push(boardCard);
@@ -66,10 +64,7 @@ public class CardsUseCaseImpl implements CardsUseCase{
         boardColor = Color.getBackgroundColor(boardCard.getCardColor());
     }
 
-    // this method creat the cards of the given color
-
     private static void makeCards(Color cardColor, int cardCode, Deck deckCards) {
-        // set the first set of cards
         deckCards.push(new NumberCard(0, cardColor, ++cardCode));
         deckCards.push(new NumberCard(1, cardColor, ++cardCode));
         deckCards.push(new NumberCard(2, cardColor, ++cardCode));
@@ -81,7 +76,6 @@ public class CardsUseCaseImpl implements CardsUseCase{
         deckCards.push(new NumberCard(8, cardColor, ++cardCode));
         deckCards.push(new NumberCard(9, cardColor, ++cardCode));
 
-        // set the second set of cards
         deckCards.push(new NumberCard(1, cardColor, ++cardCode));
         deckCards.push(new NumberCard(2, cardColor, ++cardCode));
         deckCards.push(new NumberCard(3, cardColor, ++cardCode));
@@ -92,15 +86,12 @@ public class CardsUseCaseImpl implements CardsUseCase{
         deckCards.push(new NumberCard(8, cardColor, ++cardCode));
         deckCards.push(new NumberCard(9, cardColor, ++cardCode));
 
-        // set the skip cards
         deckCards.push(new SkipCard(cardColor, ++cardCode));
         deckCards.push(new SkipCard(cardColor, ++cardCode));
 
-        // set the reverse cards
         deckCards.push(new ReverseCard(cardColor, ++cardCode));
         deckCards.push(new ReverseCard(cardColor, ++cardCode));
 
-        // set the draw2 cards
         deckCards.push(new Draw2Card(cardColor, ++cardCode));
         deckCards.push(new Draw2Card(cardColor, ++cardCode));
     }
