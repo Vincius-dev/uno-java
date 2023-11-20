@@ -9,6 +9,7 @@ public class GameBoard {
     private Deck deckCards = new Deck();
     private Deck discartDeck = new Deck();
     private Color boardColor;
+    private int cardsToDraw = 0;
 
     public Card getBoardCard(){
         return discartDeck.top();

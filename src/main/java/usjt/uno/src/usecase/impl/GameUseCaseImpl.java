@@ -1,6 +1,7 @@
 package usjt.uno.src.usecase.impl;
 
 import usjt.uno.src.cards.Card;
+import usjt.uno.src.cards.CardPenality;
 import usjt.uno.src.cards.especialcards.*;
 import usjt.uno.src.entities.Bot;
 import usjt.uno.src.entities.Deck;
@@ -23,6 +24,7 @@ public class GameUseCaseImpl implements GameUseCase {
     private final PlayerUseCase playerUseCase;
     private final CardsUseCase cardsUseCase;
 
+
     public GameUseCaseImpl() {
         this.playerUseCase = new PlayerUseCaseImpl(this);
         this.cardsUseCase = new CardsUseCaseImpl();
@@ -40,6 +42,9 @@ public class GameUseCaseImpl implements GameUseCase {
             currentPlayer = players.getHead().getPlayer();
 
             System.out.println();
+            System.out.println("Cartas acumuladas para comprar: "+ gameBoard.getCardsToDraw());
+
+            System.out.println();
             System.out.println("É a vez do " + currentPlayer.getPlayerName());
             System.out.println();
 
@@ -52,6 +57,13 @@ public class GameUseCaseImpl implements GameUseCase {
                 cardsUseCase.suffleCards(gameBoard.getDeckCards());
             }
 
+            //Verifica se o jogador tem alguma penalidade do turno anterior
+            if (playerUseCase.applyPenalty(players, gameBoard)){
+                players.playerPlayed();
+                System.out.println(currentPlayer.getPlayerName() + " não pode jogar esse turno.");
+                continue;
+            }
+
             //Verifica se tem cartas para jogar
             if (!playerUseCase.checkPlayerCards(currentPlayer)) {
                 playerUseCase.giveCardToPlayer(currentPlayer, gameBoard.getDeckCards());
@@ -60,7 +72,7 @@ public class GameUseCaseImpl implements GameUseCase {
                     if(currentPlayer instanceof Bot){
                         Printer.printNumberOfPlayersCards(players);
                         Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
-                        System.out.println("O bot " + currentPlayer.getPlayerName() + " não possui castas para jogar");
+                        System.out.println("O bot " + currentPlayer.getPlayerName() + " não possui cartas para jogar");
                     } else {
                         System.out.println("Cartas no baralho: " + gameBoard.getDeckCards().size());
                         System.out.println("Cartas no monte de descarte: " + gameBoard.getDiscartDeck().size());
@@ -96,12 +108,11 @@ public class GameUseCaseImpl implements GameUseCase {
                 System.out.println("Cartas no baralho: " + gameBoard.getDeckCards().size());
                 System.out.println("Cartas no monte de descarte: " + gameBoard.getDiscartDeck().size());
 
-                Printer.printPlayerCards(currentPlayer);
+                //Printer.printPlayerCards(currentPlayer);
 
                 playerChoosenCard = bot.playTurn();
 
-
-                playerUseCase.setIndex(playerChoosenCard, players);
+                playerUseCase.setEffectCard(playerChoosenCard, players, gameBoard);
                 Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
                 continue;
             }
@@ -173,19 +184,7 @@ public class GameUseCaseImpl implements GameUseCase {
                 Printer.inValidInputError(inputs);
             }
 
-            int n = 0;
-            if (playerChoosenCard instanceof WildDrawCard) {
-                n = 4;
-            } else if (playerChoosenCard instanceof Draw2Card) {
-                n = 2;
-            }
-            if (n > 0){
-                for (int i = 0; i < n; i++) {
-                    players.getHead().getNextPlayer().getPlayer().addCard(gameBoard.getDeckCards().pop());
-                }
-            }
-
-            playerUseCase.setIndex(playerChoosenCard, players);
+            playerUseCase.setEffectCard(playerChoosenCard, players, gameBoard);
             Printer.printGameBoard(gameBoard.getBoardCard(), gameBoard.getBoardColor());
         }
 

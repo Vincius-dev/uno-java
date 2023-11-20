@@ -128,7 +128,7 @@ public class Printer {
         System.out.println(INDENT + "\b\b\b\b\b\b–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––");
 
         PlayerNode pAtual = players.getHead();
-        for (int i = 0; i < players.getSize() - 1; i++) {
+        for (int i = 0; i < players.getSize(); i++) {
             System.out.printf("%s%13s :  %7d\n", INDENT,
                     pAtual.getPlayer().getPlayerName(),
                     pAtual.getPlayer().getNumberOfPlayerCards());

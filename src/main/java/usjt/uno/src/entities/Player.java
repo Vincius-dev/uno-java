@@ -2,6 +2,7 @@ package usjt.uno.src.entities;
 
 import lombok.Data;
 import usjt.uno.src.cards.Card;
+import usjt.uno.src.cards.CardPenality;
 
 import java.util.ArrayList;
 
@@ -9,10 +10,11 @@ import java.util.ArrayList;
 public class Player {
     private String playerName;
     private ArrayList<Card> playerCards;
+    private CardPenality currentPenalty;
 
     public Player(String name) {
         this.playerName = name;
-
+        this.currentPenalty = null;
         playerCards = new ArrayList<>();
     }
 
