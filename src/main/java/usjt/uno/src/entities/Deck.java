@@ -1,6 +1,6 @@
-package usjt.uno.model.game;
+package usjt.uno.src.entities;
 
-import usjt.uno.model.game.cards.Card;
+import usjt.uno.src.cards.Card;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -11,7 +11,7 @@ public class Deck {
     public int iPointerPosition;
 
     public Deck() {
-        iSize = 200;
+        iSize = 108;
         iPointerPosition = 0;
         iStack = new Card[iSize];
     }
@@ -50,6 +50,11 @@ public class Deck {
             iStack[j] = temp;
         }
     }
+
+    public int size() {
+        return iPointerPosition;
+    }
+
 
     @Override
     public String toString() {

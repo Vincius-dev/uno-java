@@ -1,10 +1,11 @@
-package usjt.uno.model.game.cards;
+package usjt.uno.src.cards;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import usjt.uno.view.Color;
 
-@Getter @AllArgsConstructor
+@Getter @AllArgsConstructor @ToString
 public class Card {
 
     private int cardScore;

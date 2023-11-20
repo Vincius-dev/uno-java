@@ -1,35 +1,30 @@
 package usjt.uno;
 
-import usjt.uno.model.entities.Bot;
-import usjt.uno.model.entities.player.Player;
-import usjt.uno.model.game.Rules;
+import usjt.uno.src.entities.Bot;
+import usjt.uno.src.entities.Player;
+import usjt.uno.src.usecase.impl.GameUseCaseImpl;
 import usjt.uno.view.Printer;
 
 import java.util.Scanner;
 
-public class Run 
-{
-    // for get the players inputs
+public class Run {
     private static Scanner inputs = new Scanner(System.in);
 
+    private static GameUseCaseImpl gameUseCase;
+
     public static void main(String[] args) {
-        // calibrate the font size of the terminal
         Printer.calibrate(inputs);
 
-        //  * required variables *
-        String holdInput; // hold the input to check that its valid or not
-        int numberOfPlayers; // the number of the game players
-        String newPlayerName, newPlayerPass; // get the new player details
+        gameUseCase = new GameUseCaseImpl();
 
-        // while player choose exit option 
+        String holdInput;
+        String newPlayerName;
+
         while (true) {
-            // while player choose valid option
             while (true) {
-                // show the game menu tho the player and get his/her choice
                 Printer.printMenu();
                 holdInput = inputs.nextLine();
 
-                // check the player input
                 if (holdInput.length() == 1 && (holdInput.charAt(0) == '1' || holdInput.charAt(0) == '2'))
                     break;
                 else 
@@ -38,28 +33,19 @@ public class Run
 
             switch (holdInput) {
                 case "1":
-                    // set the number of the players
-                    numberOfPlayers = 4;
-
                     Printer.getPlayerName();
                     newPlayerName = inputs.nextLine();
-                    Rules.addPlayer(new Player(newPlayerName));
+                    gameUseCase.addPlayer(new Player(newPlayerName)); //Adiciona os jogadores
 
-                    // get the players detials
-                    for (int n = 0; n < 3; n++) {
-                        Rules.addPlayer(new Bot(n));
+                    for (int n = 0; n < 3; n++) { //Adiciona os bots
+                        gameUseCase.addPlayer(new Bot(n, gameUseCase));
                     }
-                    
-                    // get the cards to the players
-                    Rules.preparationGameCards();
-                    Rules.distributeCards();
 
-                    // run the game
-                    Rules.runGame(inputs);
+                    gameUseCase.preparationGameBoard(); //Prepara a mesa
 
-                    // reset the game
-                    Rules.reset();
+                    gameUseCase.runGame(inputs);//Inicia jogo
 
+                    gameUseCase.reset();
                 break;
 
                 case "2":

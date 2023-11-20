@@ -1,11 +1,12 @@
-package usjt.uno.model.game.cards.especialcards;
+package usjt.uno.src.cards.especialcards;
 
-import usjt.uno.model.game.cards.Card;
+
+import usjt.uno.src.cards.Card;
 import usjt.uno.view.Color;
 
-public class SkipCard extends Card {
+public class Draw2Card extends Card {
 
-    public SkipCard(Color cardColor, int cardCode) {
+    public Draw2Card(Color cardColor, int cardCode) {
         super(20, cardColor, cardCode);
     }
 
@@ -24,7 +25,7 @@ public class SkipCard extends Card {
                         Color.getColorCodeString(Color.RESET);
 
             case 2:
-                return cardColorCode + "|⍉      |" +
+                return cardColorCode + "|+2     |" +
                         Color.getColorCodeString(Color.RESET);
 
             case 3:
@@ -33,17 +34,18 @@ public class SkipCard extends Card {
                         Color.getColorCodeString(Color.RESET);
 
             case 4:
-                return cardColorCode + "|S k i p|" +
+                return cardColorCode + "| Draw2 |" +
                         Color.getColorCodeString(Color.RESET);
 
             case 6:
-                return cardColorCode + "|      ⍉|" + 
+                return cardColorCode + "|     +2|" + 
                         Color.getColorCodeString(Color.RESET);
 
             case 8:
                 return Color.getColorCodeString(Color.WHITE) + "code: " + super.getCardCode() +
                         Color.getColorCodeString(Color.RESET);
         }
+
         return null;
     }
 }

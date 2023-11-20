@@ -38,17 +38,11 @@ public enum Color {
         RESET.colorCodeString = "\033[92;40m";
     }
 
-    /**
-     * This method return the ANSI code of the given color
-     */
     public static String getColorCodeString(Color color)
     {
         return color.colorCodeString;
     }
 
-    /**
-     * This method the background color of the input text color
-     */
     public static Color getBackgroundColor(Color textColor) {
         switch (textColor) {
             case RED:
